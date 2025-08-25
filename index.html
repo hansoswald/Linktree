@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Linktree</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    :root {
+      --text-light: #222;
+      --text-dark: #f1f1f1;
+      --transition: 0.4s ease;
+
+      /* Brand Colors */
+      --insta: #E1306C;
+      --tiktok: #69C9D0;
+      --youtube: #FF0000;
+      --behance: #1769FF;
+      --website: #34a853;
+      --whatsapp: #25D366;
+    }
+
+    body {
+      margin: 0;
+      font-family: "Poppins", sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      min-height: 100vh;
+      color: var(--text-light);
+      background: linear-gradient(-45deg, #fdfbfb, #ebedee, #d9afd9, #97d9e1);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+      transition: var(--transition);
+    }
+
+    body.dark {
+      color: var(--text-dark);
+      background: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #1c1c1c);
+      background-size: 400% 400%;
+      animation: gradientShift 15s ease infinite;
+    }
+
+    @keyframes gradientShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .profile {
+      text-align: center;
+      margin-top: 50px;
+      animation: fadeIn 1s ease;
+    }
+
+    .profile img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+      transition: var(--transition);
+    }
+
+    body.dark .profile img {
+      box-shadow: 0 0 25px #00f2ff;
+    }
+
+    .profile h1 {
+      margin: 15px 0 5px;
+      font-size: 24px;
+    }
+
+    .profile p {
+      font-size: 14px;
+      opacity: 0.8;
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+      margin-top: 40px;
+      width: 90%;
+      max-width: 400px;
+    }
+
+    .link-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 15px;
+      border-radius: 15px;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(10px);
+      text-decoration: none;
+      font-size: 18px;
+      color: inherit;
+      font-weight: 500;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    .link-btn:hover {
+      transform: scale(1.05) rotateX(5deg) rotateY(5deg);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    /* Neon glow colors on hover */
+    .link-btn.website:hover { box-shadow: 0 0 20px var(--website); }
+    .link-btn.behance:hover { box-shadow: 0 0 20px var(--behance); }
+    .link-btn.youtube:hover { box-shadow: 0 0 20px var(--youtube); }
+    .link-btn.tiktok:hover { box-shadow: 0 0 20px var(--tiktok); }
+    .link-btn.instagram:hover { box-shadow: 0 0 20px var(--insta); }
+    .link-btn.whatsapp:hover { box-shadow: 0 0 20px var(--whatsapp); }
+
+    footer {
+      margin-top: auto;
+      padding: 20px;
+      font-size: 14px;
+      opacity: 0.7;
+      text-align: center;
+    }
+
+    .toggle-btn {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+      transition: var(--transition);
+    }
+
+    body.dark .toggle-btn {
+      background: #222;
+      color: #fff;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Loader */
+    #loader {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #111;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      color: #fff;
+      font-size: 22px;
+      flex-direction: column;
+    }
+
+    #loader.hidden { display: none; }
+
+    .spinner {
+      border: 5px solid rgba(255,255,255,0.2);
+      border-top: 5px solid #00f2ff;
+      border-radius: 50%;
+      width: 50px;
+      height: 50px;
+      animation: spin 1s linear infinite;
+      margin-bottom: 15px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Loader -->
+  <div id="loader">
+    <div class="spinner"></div>
+    Loading...
+  </div>
+
+  <button class="toggle-btn" id="darkToggle"><i class="fa-solid fa-moon"></i></button>
+
+  <div class="profile">
+    <img src="link.png" alt="Profile">
+    <h1>44 Design</h1>
+    <p>Graphic Designer | Website Developer</p>
+  </div>
+  
+  <!-- Add this inside your .links div, BEFORE the Website link -->
+<a href="#" class="link-btn freelance" onclick="openFreelanceModal()"><i class="fa-solid fa-rocket"></i> Freelance Design</a>
+
+<!-- Freelance Modal -->
+<div class="modal" id="freelanceModal">
+  <div class="modal-content">
+    <button class="close-btn" onclick="closeFreelanceModal()">×</button>
+    <h2>Freelance Design</h2>
+    <p>I create unique and professional designs including logos, posters, and social media graphics. Let’s collaborate on your next project!</p>
+    <div class="portfolio-preview">
+      <img src="E.png" alt="Sample 1">
+      <img src="B.png" alt="Sample 2">
+    </div>
+    <a class="link-btn whatsapp" href="https://wa.me/message/4YVDUFFRHWSSH1" target="_blank"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+  </div>
+</div>
+
+<style>
+  /* Modal Overlay */
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    padding: 20px;
+  }
+
+  /* Modal Content (Glassmorphism + Neon Glow on Hover) */
+  .modal-content {
+    position: relative;
+    background: rgba(255,255,255,0.08);
+    backdrop-filter: blur(15px);
+    border-radius: 20px;
+    padding: 25px 20px 20px 20px;
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    transition: box-shadow 0.3s ease, transform 0.3s ease;
+    animation: fadeIn 0.3s ease;
+  }
+
+  /* Neon Glow Hover */
+  .modal-content:hover {
+    box-shadow: 0 0 25px #ff3b6a, 0 0 50px #ff3b6a;
+    transform: translateY(-1px);
+  }
+
+  /* Close Button Top-Right */
+  .modal-content .close-btn {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    color: #fff;
+    cursor: pointer;
+  }
+
+  /* Portfolio Images - Fixed Size */
+  .portfolio-preview img {
+    width: 100%;
+    max-height: 150px; /* limits height */
+    object-fit: cover;  /* crop/fit images nicely */
+    border-radius: 12px;
+    margin: 10px 0;
+  }
+
+  /* Fade-in Animation */
+  @keyframes fadeIn {
+    from {opacity: 0; transform: scale(0.95);}
+    to {opacity: 1; transform: scale(1);}
+  }
+</style>
+
+<script>
+  function openFreelanceModal() {
+    const modal = document.getElementById('freelanceModal');
+    modal.style.display = 'flex';
+    modal.querySelector('.modal-content').style.transform = 'scale(0.9)';
+    setTimeout(() => {
+      modal.querySelector('.modal-content').style.transform = 'scale(1)';
+    }, 10);
+  }
+
+  function closeFreelanceModal() {
+    document.getElementById('freelanceModal').style.display = 'none';
+  }
+</script>
+
+
+  <div class="links">
+    <a href="https://hansoswald.github.io/44-design/" class="link-btn website"><i class="fa-solid fa-globe"></i> Website</a>
+    <a href="https://www.behance.net/kolmanoswald" class="link-btn behance"><i class="fa-brands fa-behance"></i> Behance</a>
+    <a href="http://www.youtube.com/@44.design-cy6cl" class="link-btn youtube"><i class="fa-brands fa-youtube"></i> YouTube</a>
+    <a href="https://www.tiktok.com/@44design4?_t=ZM-8zAyOeuo7nS&_r=1" class="link-btn tiktok"><i class="fa-brands fa-tiktok"></i> TikTok</a>
+    <a href="https://www.instagram.com/44_design?igsh=MWo2d3Zoa2FlYXI3cQ==" class="link-btn instagram"><i class="fa-brands fa-instagram"></i> Instagram</a>
+    <a href="https://wa.me/message/4YVDUFFRHWSSH1" class="link-btn whatsapp"><i class="fa-brands fa-whatsapp"></i> WhatsApp</a>
+  </div>
+
+  <footer>
+    Made with  Hans Oswald
+  </footer>
+
+  <script>
+    // Dark mode toggle
+    const toggleBtn = document.getElementById('darkToggle');
+    const body = document.body;
+
+    toggleBtn.addEventListener('click', () => {
+      body.classList.toggle('dark');
+      toggleBtn.innerHTML = body.classList.contains('dark') 
+        ? '<i class="fa-solid fa-sun"></i>'
+        : '<i class="fa-solid fa-moon"></i>';
+    });
+
+    // Fade-in animation for links
+    const links = document.querySelectorAll('.link-btn');
+    links.forEach((link, index) => {
+      setTimeout(() => {
+        link.style.opacity = '1';
+        link.style.transform = 'translateY(0)';
+      }, 300 * index);
+    });
+
+    // Loader logic
+    const loader = document.getElementById('loader');
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        loader.classList.add('hidden');
+      }, 1500);
+    });
+  </script>
+
+</body>
+</html>
